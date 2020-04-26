@@ -1,68 +1,107 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Table Component
 
-## Available Scripts
+Usage:
 
-In the project directory, you can run:
+```
+import Table from '/components/Table';
 
-### `npm start`
+<Table data={data} cols={tableConstants(handleEdit)} isDark hoverable striped bordered={false} />
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Create a Table Constant which will be supplied to Table and data will be rendered automatically
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```
+import React from 'react';
 
-### `npm test`
+export const tableConstants = (handleEdit) => {
+  return [
+    {
+      title: 'ID',
+      key: 'id',
+      render: rowData => {
+        return <span>{rowData.id}</span>;
+      },
+    },
+    {
+      title: 'Name',
+      key: 'name',
+      render: rowData => {
+        return <span>{rowData.name}</span>;
+      },
+    },
+    {
+      title: 'Category',
+      key: 'category',
+      render: rowData => {
+        return <span>{rowData.category}</span>;
+      },
+    },
+    {
+      title: 'Country',
+      key: 'country',
+      render: rowData => {
+        return <span>{rowData.country}</span>;
+      },
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: rowData => {
+        return <button onClick={() => handleEdit}>Edit</button>;
+      },
+    },
+  ];
+};
+```
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Here `tableConstants()` is a javascript function which returns an array of objects or columns to be displayed on table. This function accepts parameters whatever you need to have in constant function to perform any additional task such as any action to be taken or some additional data to be displayed or anything. Making this as function gives developers more power to take control on table.
 
-### `npm run build`
+Let's have a look into a single item for the table constants array:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+{
+  title: 'ID',
+  key: 'id',
+  render: rowData => {
+    return <span>{rowData.id}</span>;
+  },
+}
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Here render: () : receives 'rowData' which is the current iteration item for received from table component to this constants so you can dig down to any level of the JSON to display your desired input.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+Eg: You have a nested JSON data as below
+{
+  name: 'Test',
+  category: {
+    name: 'Cateogory Name',
+    subCategory: {
+      name: 'Sub Category Name
+    }
+  }
+}
 
-### `npm run eject`
+and you have to show Sub Category name to any column you will have to refer it constant item as below:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+{
+  title: 'Sub Category',
+  key: 'sub-category',
+  render: rowData => {
+    return <span>{rowData.category.subCategory.name}</span>;
+  },
+}
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+In this way you will not have to re-format the data everytime you send to table
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Props
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+| Property          | Description                                                            | Type    | Default | Required |
+| ----------------- | ---------------------------------------------------------------------- | ------- | ------- | -------- |
+| data              | Data array to be displayed on table                                    | array[] |         | Yes      |
+| cols              | table constant function which returns array of columns to be displayed | array[] |         | Yes      |
+| isDark   | To enable dark mode to table                         | boolean | false   | No       |
+| hoverable | To hoverable bootstrap table                                                   | boolean | false   | No       |
+| striped | To striped bootstrap table                                                   | boolean | false   | No       |
+| bordered | To bordered bootstrap table                                                   | boolean | true   | No       |
